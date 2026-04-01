@@ -74,11 +74,12 @@ async function getFutureEventsFromNotion(token, dbId) {
 // 製作溫暖水彩風 Flex Message
 function createCarouselFlexMessage(notionEvents) {
   const bubbles = notionEvents.map(event => {
-    const title = event.properties['活動名稱'].title[0]?.plain_text || '未命名活動';
-    const date = event.properties['活動日期'].date?.start || '日期未定';
-    const time = event.properties['時段'].rich_text[0]?.plain_text || '';
-    const location = event.properties['地點'].rich_text[0]?.plain_text || '地點確認中';
-
+    // 防彈升級版：加上了 ?.[0] 防止陣列找不到而當機，並同時支援「文字」與「單選標籤」格式
+    const title = event.properties['活動名稱']?.title?.[0]?.plain_text || '未命名活動';
+    const date = event.properties['活動日期']?.date?.start || '日期未定';
+    const time = event.properties['時段']?.rich_text?.[0]?.plain_text || event.properties['時段']?.select?.name || '';
+    const location = event.properties['地點']?.rich_text?.[0]?.plain_text || event.properties['地點']?.select?.name || '地點確認中';
+    
     return {
       "type": "bubble",
       "size": "micro",
