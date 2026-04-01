@@ -3,11 +3,11 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(200).json({ message: '涵香療癒所 Webhook 正常運作中！' });
   }
-
+  
   // 從 Vercel 環境變數讀取金鑰
-  const LINE_TOKEN = '09f709cc7d290f3d611470985fd20773';
-  const NOTION_TOKEN = 'ntn_o62070106085aj5mN6o0wEzDsWlU6ptnkrY9WlIk56O9Jd';
-  const DATABASE_ID = '334171f77730802f9995cebfa153cd26';
+  const LINE_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  const NOTION_TOKEN = process.env.NOTION_TOKEN;
+  const DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
   try {
     const events = req.body.events;
