@@ -148,5 +148,6 @@ async function replyMessage(token, replyToken, messages) {
   
   // 讓系統把 LINE 的回覆印在 Vercel 監視器上
   const result = await response.json();
+  console.log('🕵️ 檢查 LINE 鑰匙狀態：', token);
   console.log('📢 LINE 官方審查結果：', result);
 }
