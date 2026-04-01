@@ -9,9 +9,6 @@ export default async function handler(req, res) {
   const NOTION_TOKEN = process.env.NOTION_TOKEN;
   const DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
-  // 👇 加入這行終極抓蟲指令 👇
-  console.log('🕵️ 檢查 LINE 鑰匙狀態：', LINE_TOKEN ? `有抓到！前五碼是 ${LINE_TOKEN.substring(0,5)}` : '糟糕！是空的 (undefined)');
-
   try {
     const events = req.body.events;
     
@@ -148,6 +145,5 @@ async function replyMessage(token, replyToken, messages) {
   
   // 讓系統把 LINE 的回覆印在 Vercel 監視器上
   const result = await response.json();
-  console.log('🕵️ 檢查 LINE 鑰匙狀態：', token);
   console.log('📢 LINE 官方審查結果：', result);
 }
