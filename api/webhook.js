@@ -132,9 +132,9 @@ function createCarouselFlexMessage(notionEvents) {
   };
 }
 
-// 發送 LINE 回覆
+// 發送 LINE 回覆 (升級版：加入監聽結果)
 async function replyMessage(token, replyToken, messages) {
-  await fetch('https://api.line.me/v2/bot/message/reply', {
+  const response = await fetch('https://api.line.me/v2/bot/message/reply', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -142,4 +142,8 @@ async function replyMessage(token, replyToken, messages) {
     },
     body: JSON.stringify({ replyToken, messages })
   });
+  
+  // 讓系統把 LINE 的回覆印在 Vercel 監視器上
+  const result = await response.json();
+  console.log('📢 LINE 官方審查結果：', result);
 }
