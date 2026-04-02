@@ -68,6 +68,7 @@ async function getFutureEventsFromNotion(token, dbId) {
   });
 
   const data = await response.json();
+  console.log('📦 Notion 抓到的資料長這樣：', JSON.stringify(data, null, 2));
   return data.results ? data.results.slice(0, 10) : [];
 }
 
