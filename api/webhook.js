@@ -75,18 +75,24 @@ async function getFutureEventsFromNotion(token, dbId) {
 // 製作溫暖水彩風 Flex Message
 function createCarouselFlexMessage(notionEvents) {
   const bubbles = notionEvents.map(event => {
-    // 防彈升級版：加上了 ?.[0] 防止陣列找不到而當機，並同時支援「文字」與「單選標籤」格式
-    const title = event.properties['活動名稱']?.title?.[0]?.plain_text || '未命名活動';
-    const date = event.properties['活動日期']?.date?.start || '日期未定';
-    const time = event.properties['時段']?.rich_text?.[0]?.plain_text || event.properties['時段']?.select?.name || '';
-    const location = event.properties['地點']?.rich_text?.[0]?.plain_text || event.properties['地點']?.select?.name || '地點確認中';
+    // 提取原本的文字資料
+      const title = event.properties['活動名稱']?.title?.[0]?.plain_text || '未命名活動';
+      const date = event.properties['活動日期']?.date?.start || '日期未定';
+      const time = event.properties['時段']?.rich_text?.[0]?.plain_text || event.properties['時段']?.select?.name || '';
+      const location = event.properties['地點']?.rich_text?.[0]?.plain_text || event.properties['地點']?.select?.name || '地點確認中';
+      
+      // 👇 新增這段：提取 Notion 的圖片網址 👇
+      // 邏輯：先找上傳的圖片 -> 再找連結圖片 -> 都沒有的話，給一張涵香療癒所的預設水彩底圖
+      const imageUrl = event.properties['活動圖片']?.files?.[0]?.file?.url || 
+                       event.properties['活動圖片']?.files?.[0]?.external?.url || 
+                       'https://images.unsplash.com/photo-1605417865910-cba11bb740ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; // 這是暫時的預設尤加利葉圖，妳之後可以換掉
     
     return {
       "type": "bubble",
       "size": "micro",
       "hero": {
         "type": "image",
-        "url": "https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", 
+        url: imageUrl, 
         "size": "full",
         "aspectRatio": "20:13",
         "aspectMode": "cover"
