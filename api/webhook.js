@@ -29,10 +29,19 @@ export default async function handler(req, res) {
         }
       }
       
-      // 預留給未來點擊「我要預約」按鈕的動作
+      // 處理點擊「我要預約」按鈕的動作
       if (event.type === 'postback') {
-        const data = event.postback.data;
-        await replyMessage(LINE_TOKEN, event.replyToken, [{ type: 'text', text: `系統測試：已收到預約指令 [${data}]` }]);
+        const eventName = event.postback.data; 
+        
+        // 👇 請把下面引號裡的網址，換成妳真實的 Tally 表單網址 👇
+        const baseUrl = 'https://tally.so/r/ZjYQQ5'; 
+        
+        // 組合出帶有活動參數的最終網址 (使用 encodeURIComponent 確保中文不會變成亂碼)
+        const formUrl = `${baseUrl}?activity=${encodeURIComponent(eventName)}`; 
+
+        const replyMsg = `太棒了！您準備預約【${eventName}】對嗎？🌿\n\n為保障您的專屬名額，請點擊下方專屬表單填寫聯絡資料，我們收到後會盡快為您確認！\n👉 ${formUrl}`;
+
+        await replyMessage(LINE_TOKEN, event.replyToken, [{ type: 'text', text: replyMsg }]);
       }
     }
     
