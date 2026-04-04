@@ -31,12 +31,16 @@ export default async function handler(req, res) {
       
       // 處理點擊「我要預約」按鈕的動作
       if (event.type === 'postback') {
-        const eventName = event.postback.data; 
+        // 👇 新增這行：使用 URLSearchParams 來解析這串暗號 👇
+        const params = new URLSearchParams(event.postback.data);
         
-        // 👇 請把下面引號裡的網址，換成妳真實的 Tally 表單網址 👇
+        // 👇 只精準抓取 'title' (活動名稱) 的部分 👇
+        const eventName = params.get('title') || '專屬活動'; 
+        
+        // 請換成妳真實的 Tally 表單網址 (我看截圖是 ZjYQQ5)
         const baseUrl = 'https://tally.so/r/ZjYQQ5'; 
         
-        // 組合出帶有活動參數的最終網址 (使用 encodeURIComponent 確保中文不會變成亂碼)
+        // 組合出乾淨的網址
         const formUrl = `${baseUrl}?activity=${encodeURIComponent(eventName)}`; 
 
         const replyMsg = `太棒了！您準備預約【${eventName}】對嗎？🌿\n\n為保障您的專屬名額，請點擊下方專屬表單填寫聯絡資料，我們收到後會盡快為您確認！\n👉 ${formUrl}`;
